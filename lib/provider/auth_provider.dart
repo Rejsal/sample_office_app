@@ -29,7 +29,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // set token in state
-  Future<void> getToken(String token) async {
+  Future<void> getToken() async {
     _loading = true;
     notifyListeners();
     try {
@@ -44,7 +44,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // remove token
-  Future<void> clearToken(String token) async {
+  Future<void> clearToken() async {
     _loading = true;
     notifyListeners();
     try {

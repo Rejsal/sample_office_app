@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           .addToken(_emailController.text);
                     } catch (e) {
                       if (!mounted) return;
-                      await infoDialog(context, 'Invalid Login', 'Ok');
+                      await infoDialog(context, e.toString(), 'Ok');
                     }
                   }
                 },
