@@ -65,61 +65,70 @@ class _ProjectScreenState extends State<ProjectScreen> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Selector<ProjectProvider, List<ProjectModel>>(
-            builder: (_, projects, __) => projects.isNotEmpty
-                ? ListView.separated(
-                    itemCount: projects.length,
-                    itemBuilder: (_, index) {
-                      return OpenContainer(
-                        closedElevation: 0.0,
-                        closedColor: kPrimary,
-                        transitionDuration: const Duration(milliseconds: 300),
-                        transitionType: ContainerTransitionType.fade,
-                        openBuilder: (BuildContext context, VoidCallback _) {
-                          return JobScreen(
-                            projectId: projects[index].id ?? 0,
-                            projectName: projects[index].title,
-                          );
-                        },
-                        closedBuilder:
-                            (BuildContext context, VoidCallback openContainer) {
-                          return Card(
-                            elevation: 4.0,
-                            clipBehavior: Clip.antiAlias,
-                            color: Colors.black,
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTile(
-                                  title: Text(
-                                    projects[index].name,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 550.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Selector<ProjectProvider, List<ProjectModel>>(
+                builder: (_, projects, __) => projects.isNotEmpty
+                    ? ListView.separated(
+                        itemCount: projects.length,
+                        itemBuilder: (_, index) {
+                          return OpenContainer(
+                            closedElevation: 0.0,
+                            closedColor: kPrimary,
+                            transitionDuration:
+                                const Duration(milliseconds: 300),
+                            transitionType: ContainerTransitionType.fade,
+                            openBuilder:
+                                (BuildContext context, VoidCallback _) {
+                              return JobScreen(
+                                projectId: projects[index].id ?? 0,
+                                projectName: projects[index].title,
+                              );
+                            },
+                            closedBuilder: (BuildContext context,
+                                VoidCallback openContainer) {
+                              return Card(
+                                elevation: 4.0,
+                                clipBehavior: Clip.antiAlias,
+                                color: Colors.black,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTile(
+                                      title: Text(
+                                        projects[index].name,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(
-                        height: 10.0,
-                      );
-                    },
-                  )
-                : const Center(
-                    child: Text(
-                      noProjects,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-            selector: (_, projects) => projects.projects,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            height: 10.0,
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text(
+                          noProjects,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                selector: (_, projects) => projects.projects,
+              ),
+            ),
           ),
         ),
       ),

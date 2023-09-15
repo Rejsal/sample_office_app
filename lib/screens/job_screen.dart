@@ -62,54 +62,62 @@ class _JobScreenState extends State<JobScreen> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Selector<JobProvider, List<JobModel>>(
-            builder: (_, jobs, __) => jobs.isNotEmpty
-                ? ListView.separated(
-                    itemCount: jobs.length,
-                    itemBuilder: (_, index) {
-                      return Card(
-                        elevation: 4.0,
-                        clipBehavior: Clip.antiAlias,
-                        color: Colors.black,
-                        margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ListTile(
-                              title: Text(
-                                jobs[index].title,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              subtitle: Text(
-                                jobs[index].description,
-                                style: const TextStyle(color: Colors.white70),
-                              ),
-                              trailing: Text(
-                                "${jobs[index].filledCount}/${jobs[index].numberOfRequirements} filled",
-                                style: const TextStyle(
-                                    color: Colors.white38, fontSize: 12),
-                              ),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 550.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Selector<JobProvider, List<JobModel>>(
+                builder: (_, jobs, __) => jobs.isNotEmpty
+                    ? ListView.separated(
+                        itemCount: jobs.length,
+                        itemBuilder: (_, index) {
+                          return Card(
+                            elevation: 4.0,
+                            clipBehavior: Clip.antiAlias,
+                            color: Colors.black,
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    jobs[index].title,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  subtitle: Text(
+                                    jobs[index].description,
+                                    style:
+                                        const TextStyle(color: Colors.white70),
+                                  ),
+                                  trailing: Text(
+                                    "${jobs[index].filledCount}/${jobs[index].numberOfRequirements} filled",
+                                    style: const TextStyle(
+                                        color: Colors.white38, fontSize: 12),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            height: 10.0,
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text(
+                          noJobs,
+                          style: TextStyle(color: Colors.white),
                         ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(
-                        height: 10.0,
-                      );
-                    },
-                  )
-                : const Center(
-                    child: Text(
-                      noJobs,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-            selector: (_, job) => job.jobs,
+                      ),
+                selector: (_, job) => job.jobs,
+              ),
+            ),
           ),
         ),
       ),

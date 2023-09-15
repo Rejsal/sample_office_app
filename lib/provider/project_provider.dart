@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:sample_office_project/models/project_model.dart';
 import 'package:sample_office_project/repository/project_repository.dart';
@@ -20,6 +21,11 @@ class ProjectProvider extends ChangeNotifier {
   }
 
   Future<void> addProject(ProjectModel project) async {
+    if (kIsWeb) {
+      _projects = [..._projects, project];
+      notifyListeners();
+      return;
+    }
     await projectRepository.insertProject(project);
     loadProjects();
   }

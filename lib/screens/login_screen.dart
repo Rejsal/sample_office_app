@@ -24,85 +24,90 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const Text(
-                login,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 36.0),
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: _emailController,
-                validator: (value) => (value!.isEmpty)
-                    ? emailRequired
-                    : !isValidEmail(value)
-                        ? emailInvalid
-                        : null,
-                style: const TextStyle(color: Colors.white),
-                decoration: kTextFieldDecoration.copyWith(hintText: email),
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                validator: (value) =>
-                    (value!.isEmpty) ? passwordRequired : null,
-                style: const TextStyle(color: Colors.white),
-                obscureText: _passwordVisible,
-                decoration: kTextFieldDecoration.copyWith(
-                  hintText: password,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      // Based on passwordVisible state choose the icon
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 550.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const Text(
+                    login,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 36.0),
+                  ),
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _emailController,
+                    validator: (value) => (value!.isEmpty)
+                        ? emailRequired
+                        : !isValidEmail(value)
+                            ? emailInvalid
+                            : null,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: kTextFieldDecoration.copyWith(hintText: email),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    validator: (value) =>
+                        (value!.isEmpty) ? passwordRequired : null,
+                    style: const TextStyle(color: Colors.white),
+                    obscureText: _passwordVisible,
+                    decoration: kTextFieldDecoration.copyWith(
+                      hintText: password,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.white54,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  CommonButton(
+                    title: login,
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          await context
+                              .read<AuthProvider>()
+                              .addToken(_emailController.text);
+                        } catch (e) {
+                          if (!mounted) return;
+                          await infoDialog(context, e.toString(), 'Ok');
+                        }
+                      }
                     },
                   ),
-                ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              CommonButton(
-                title: login,
-                onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      await context
-                          .read<AuthProvider>()
-                          .addToken(_emailController.text);
-                    } catch (e) {
-                      if (!mounted) return;
-                      await infoDialog(context, e.toString(), 'Ok');
-                    }
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
-            ],
+            ),
           ),
         ),
       ),

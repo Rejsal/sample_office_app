@@ -30,50 +30,57 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              const SizedBox(
-                height: 50.0,
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 550.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 50.0,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    controller: _titleController,
+                    validator: (value) =>
+                        (value!.isEmpty) ? titleRequired : null,
+                    style: const TextStyle(color: Colors.white),
+                    decoration:
+                        kTextFieldDecoration.copyWith(hintText: projectTitle),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  CommonButton(
+                    title: save,
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          await context.read<ProjectProvider>().addProject(
+                              ProjectModel(
+                                  title: _titleController.text,
+                                  name: _titleController.text
+                                      .replaceAll(" ", '-')));
+                          if (!mounted) return;
+                          Navigator.pop(context);
+                        } catch (e) {
+                          if (!mounted) return;
+                          await infoDialog(context, e.toString(), 'Ok');
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                ],
               ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                controller: _titleController,
-                validator: (value) => (value!.isEmpty) ? titleRequired : null,
-                style: const TextStyle(color: Colors.white),
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: projectTitle),
-              ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              CommonButton(
-                title: save,
-                onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      await context.read<ProjectProvider>().addProject(
-                          ProjectModel(
-                              title: _titleController.text,
-                              name:
-                                  _titleController.text.replaceAll(" ", '-')));
-                      if (!mounted) return;
-                      Navigator.pop(context);
-                    } catch (e) {
-                      if (!mounted) return;
-                      await infoDialog(context, e.toString(), 'Ok');
-                    }
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
-            ],
+            ),
           ),
         ),
       ),
